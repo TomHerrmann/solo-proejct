@@ -1,7 +1,8 @@
 const express = require('express');
-let app = express();
+const app = express();
+const path = require('path');
 
-app.get('/', (req, res) => res.send('THE BACKENED IS WORKING'));
+app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, '../index.html')));
 
 app.use(express.static('public'));
 
