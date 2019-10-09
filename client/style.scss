@@ -1,0 +1,36 @@
+body {
+  background: #ce6868;
+  color: #383737;
+  text-align: center;
+}
+
+input {
+  border-radius: 25px;
+  margin: 10px;
+  text-align: center;
+  box-shadow: 1px 1px;
+}
+
+.button {
+  border-radius: 25px;
+  box-shadow: 1px 1px;
+  margin: 2px;
+}
+
+#result {
+  background: whitesmoke;
+  border: 2px solid #383737;
+  height: 40px;
+  width: 60%;
+  box-shadow: 3px 5px;
+  margin: 2% auto;
+}
+
+#item {
+  background: whitesmoke;
+  border: 2px solid #383737;
+  height: 100px;
+  width: 60%;
+  box-shadow: 3px 5px;
+  margin: 0 auto;
+}

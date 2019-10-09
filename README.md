@@ -3,7 +3,6 @@
 Tree
 
 -App
--Main Container ('/')
 --Search
 ====Redirects to Results baed on input
 --Feed

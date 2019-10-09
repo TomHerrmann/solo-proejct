@@ -2,17 +2,20 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-  entry: path.resolve(__dirname, './client/app.jsx'),
+  entry: path.resolve(__dirname, './client/index.js'),
   output: {
-    path: path.resolve(__dirname, 'build'),
-    filename: 'bundle.js'
+    // path: path.resolve(__dirname, 'public/'),
+    // filename: 'bundle.js'
+    filename: 'bundle.js',
+    path: __dirname + 'public',
+    publicPath: './public'
   },
-  mode: 'production',
+  mode: 'development',
   module: {
     rules: [
       {
         // transpiles js, jsx
-        test: /\.jsx?/,
+        test: /\.jsx?$/,
         exclude: path.resolve(__dirname, 'node_modules'),
         use: {
           loader: 'babel-loader',
@@ -29,10 +32,12 @@ module.exports = {
     ]
   },
   devServer: {
-    publicPath: path.resolve(__dirname, '/build/'),
+    publicPath: path.resolve(__dirname, '/public/'),
     port: 8080,
     proxy: {
-      // firugre this one out : 'http://localhost:3000'
+      '/api': 'http://localhost:3000'
     }
-  }
+  },
+  devtool: 'source-map',
+  performance: { hints: false }
 };
