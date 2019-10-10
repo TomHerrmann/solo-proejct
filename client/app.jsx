@@ -198,6 +198,7 @@ class App extends Component {
         })
           .catch(err => console.log('POST ERROR', err))
       })
+      .then(this.setState(...this.state))
       .catch(err => console.log('GET ERROR', err))
   }
 

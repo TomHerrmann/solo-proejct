@@ -26,6 +26,11 @@ input {
   margin: 2% auto;
 }
 
+#feed {
+  display: flex;
+  flex-direction: column;
+}
+
 #item {
   background: whitesmoke;
   border: 2px solid #383737;
