@@ -20,7 +20,7 @@ input {
 #result {
   background: whitesmoke;
   border: 2px solid #383737;
-  height: 40px;
+  height: auto;
   width: 60%;
   box-shadow: 3px 5px;
   margin: 2% auto;
@@ -29,11 +29,16 @@ input {
 #item {
   background: whitesmoke;
   border: 2px solid #383737;
-  height: 100px;
+  height: auto;
   width: 60%;
   margin: 25px;
   box-shadow: 3px 5px;
-  margin: 0 auto;
+  margin: 1% auto;
+  font-size: 20;
+}
+
+#item p {
+  font-size: medium
 }
 
 footer {

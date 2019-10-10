@@ -21,7 +21,9 @@ class Item extends Component {
     return (
       <button key={this.props.id} id="item">
 
-        <h1>{this.props.title}</h1>
+        <h1>{this.props.title} ({this.props.year})</h1>
+        <h2>Rotten Tomatoes Score: {this.props.rt}</h2>
+        <p>Summary: {this.props.plot}</p>
         {/* <h3>
           {this.props.title} ({this.props.year})
         </h3>
@@ -63,8 +65,9 @@ class Feed extends Component {
 
     if (this.props.feedItems) {
       this.props.feedItems.forEach(elem => {
+        console.log(elem)
         itemsArray.push(
-          <Item title={elem.title} />
+          <Item title={elem.title} id={elem.id} year={elem.year} plot={elem.plot} rt={elem.rt} />
         )
       })
     }
@@ -181,8 +184,8 @@ class App extends Component {
       .then(res => res.json())
       .then(data => {
         newItem[data.imdbID] = data;
-        Object.assign(newItem[data.imdbID], { watched: false });
-        this.setState(Object.assign(this.state.items, newItem));
+        // Object.assign(newItem[data.imdbID], { watched: false });
+        // this.setState(Object.assign(this.state.items, newItem));
         // POST reqeust
         // *** NOT WORKING ****
         fetch('/postmedia', {

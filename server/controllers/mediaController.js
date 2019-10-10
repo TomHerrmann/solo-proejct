@@ -10,7 +10,7 @@ const name = user
 module.exports = {
   getMedia: (req, res, next) => {
     // query SELECT movies FROM watchlist WHERE watch="false ;";
-    const dbQuery = 'SELECT title FROM watchlist WHERE name = $1';
+    const dbQuery = 'SELECT id, title, year, rt, plot FROM watchlist WHERE name = $1';
     const valuesArr = [name]
     res.locals.feedData = []
     pool.query(dbQuery, valuesArr)

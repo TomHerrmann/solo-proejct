@@ -165,7 +165,7 @@ function (_Component2) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         key: this.props.id,
         id: "item"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, this.props.title));
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, this.props.title, " (", this.props.year, ")"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Rotten Tomatoes Score: ", this.props.rt));
     }
   }]);
 
@@ -222,8 +222,13 @@ function (_Component4) {
 
       if (this.props.feedItems) {
         this.props.feedItems.forEach(function (elem) {
+          console.log(elem);
           itemsArray.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Item, {
-            title: elem.title
+            title: elem.title,
+            id: elem.id,
+            year: elem.year,
+            plot: elem.plot,
+            rt: elem.rt
           }));
         });
       } // front end rendering - not needed 
@@ -376,20 +381,14 @@ function (_Component6) {
   }, {
     key: "addToWatchList",
     value: function addToWatchList(buttonKey) {
-      var _this6 = this;
-
       var newItem = {};
       node_fetch__WEBPACK_IMPORTED_MODULE_1___default()("http://www.omdbapi.com/?i=".concat(buttonKey, "&apikey=e53aeb90")).then(function (res) {
         return res.json();
       }).then(function (data) {
-        newItem[data.imdbID] = data;
-        Object.assign(newItem[data.imdbID], {
-          watched: false
-        });
-
-        _this6.setState(Object.assign(_this6.state.items, newItem)); // POST reqeust
+        newItem[data.imdbID] = data; // Object.assign(newItem[data.imdbID], { watched: false });
+        // this.setState(Object.assign(this.state.items, newItem));
+        // POST reqeust
         // *** NOT WORKING ****
-
 
         node_fetch__WEBPACK_IMPORTED_MODULE_1___default()('/postmedia', {
           headers: {
