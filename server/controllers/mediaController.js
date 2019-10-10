@@ -17,6 +17,7 @@ module.exports = {
       .then(data => {
         if (!data) return next()
         data.rows.forEach(elem => {
+          elem.watched = false;
           res.locals.feedData.push(elem)
         })
         return next();
@@ -31,14 +32,6 @@ module.exports = {
     return next();
   },
 
-  setToWatched: (req, res, next) => {
-    const dbQuery = 'UPDATE watchlist SET watched="True" WHERE id = $1'
-    const { id } = req.body;
-    const valuesArr = [id];
-    pool.query(dbQuery, valuesArr);
-    return next()
-  },
-
   // clearAllMedia: (req, res, next) => {
   //   const dbQuery = 'DELETE FROM watchlist'
   //   pool.query(dbQuery);
@@ -46,9 +39,12 @@ module.exports = {
   // },
 
   setAsWatched: (req, res, next) => {
-    console.log('SET AS WATCHED WORKING')
-    // const dbQuery
-    // pool.query(dbQuery);
-    // return next();
+    const dbQuery = 'DELETE FROM watchlist SET watched=true WHERE id = $1'
+    const { id } = req.body;
+    const valuesArr = [id];
+    pool.query(dbQuery, valuesArr, (err, res) => {
+      if (err) console.log('ERROR')
+      return next()
+    });
   }
 };

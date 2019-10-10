@@ -162,10 +162,15 @@ function (_Component2) {
   _createClass(Item, [{
     key: "render",
     value: function render() {
+      var _this = this;
+
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         key: this.props.id,
-        id: "item"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, this.props.title, " (", this.props.year, ")"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Rotten Tomatoes Score: ", this.props.rt));
+        id: "item",
+        onClick: function onClick() {
+          _this.props.setAsWatched(_this.props.id);
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, this.props.title, " (", this.props.year, ")"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Rotten Tomatoes Score: ", this.props.rt), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, this.props.plot));
     }
   }]);
 
@@ -188,15 +193,15 @@ function (_Component3) {
   _createClass(Result, [{
     key: "render",
     value: function render() {
-      var _this = this;
+      var _this2 = this;
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         key: this.props.id,
         id: "result",
         onClick: function onClick() {
-          _this.props.addToWatchList(_this.props.id);
+          _this2.props.addToWatchList(_this2.props.id);
         }
-      }, this.props.title, " (", this.props.year, ")");
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, this.props.title, " (", this.props.year, ")"));
     }
   }]);
 
@@ -218,17 +223,20 @@ function (_Component4) {
   _createClass(Feed, [{
     key: "render",
     value: function render() {
+      var _this3 = this;
+
       var itemsArray = [];
+      console.log(this.props.feedItems);
 
       if (this.props.feedItems) {
         this.props.feedItems.forEach(function (elem) {
-          console.log(elem);
-          itemsArray.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Item, {
+          if (elem.watched === false) itemsArray.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Item, {
             title: elem.title,
             id: elem.id,
             year: elem.year,
             plot: elem.plot,
-            rt: elem.rt
+            rt: elem.rt,
+            setAsWatched: _this3.props.setAsWatched
           }));
         });
       } // front end rendering - not needed 
@@ -286,7 +294,7 @@ function (_Component5) {
   _createClass(Results, [{
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this4 = this;
 
       var resultsArray = [];
 
@@ -300,7 +308,7 @@ function (_Component5) {
               poster: elem.Poster,
               title: elem.Title,
               year: elem.Year,
-              addToWatchList: _this2.props.addToWatchList
+              addToWatchList: _this4.props.addToWatchList
             })));
           }
         });
@@ -321,32 +329,32 @@ function (_Component6) {
   _inherits(App, _Component6);
 
   function App(props) {
-    var _this3;
+    var _this5;
 
     _classCallCheck(this, App);
 
-    _this3 = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this, props));
-    _this3.state = {
+    _this5 = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this, props));
+    _this5.state = {
       searchResults: '',
       items: {}
     };
-    _this3.searchFunc = _this3.searchFunc.bind(_assertThisInitialized(_this3));
-    _this3.clearResults = _this3.clearResults.bind(_assertThisInitialized(_this3));
-    _this3.addToWatchList = _this3.addToWatchList.bind(_assertThisInitialized(_this3));
-    _this3.clearFeed = _this3.clearFeed.bind(_assertThisInitialized(_this3));
-    _this3.setAsWatched = _this3.setAsWatched.bind(_assertThisInitialized(_this3));
-    return _this3;
+    _this5.searchFunc = _this5.searchFunc.bind(_assertThisInitialized(_this5));
+    _this5.clearResults = _this5.clearResults.bind(_assertThisInitialized(_this5));
+    _this5.addToWatchList = _this5.addToWatchList.bind(_assertThisInitialized(_this5));
+    _this5.clearFeed = _this5.clearFeed.bind(_assertThisInitialized(_this5));
+    _this5.setAsWatched = _this5.setAsWatched.bind(_assertThisInitialized(_this5));
+    return _this5;
   }
 
   _createClass(App, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this4 = this;
+      var _this6 = this;
 
       node_fetch__WEBPACK_IMPORTED_MODULE_1___default()('/getmedia').then(function (res) {
         return res.json();
       }).then(function (data) {
-        return _this4.setState({
+        return _this6.setState({
           feedItems: data
         });
       });
@@ -354,13 +362,13 @@ function (_Component6) {
   }, {
     key: "searchFunc",
     value: function searchFunc() {
-      var _this5 = this;
+      var _this7 = this;
 
       var searchValue = document.querySelector('input').value;
       node_fetch__WEBPACK_IMPORTED_MODULE_1___default()("http://www.omdbapi.com/?s=".concat(searchValue, "&apikey=e53aeb90")).then(function (res) {
         return res.json();
       }).then(function (data) {
-        return _this5.setState({
+        return _this7.setState({
           searchResults: data.Search
         });
       });
@@ -413,8 +421,17 @@ function (_Component6) {
     }
   }, {
     key: "setAsWatched",
-    value: function setAsWatched() {
-      node_fetch__WEBPACK_IMPORTED_MODULE_1___default()('/setAsWatched');
+    value: function setAsWatched(id) {
+      node_fetch__WEBPACK_IMPORTED_MODULE_1___default()('/setAsWatched', {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          id: id
+        })
+      });
     }
   }, {
     key: "render",
@@ -441,7 +458,7 @@ function (_Component6) {
         searchResults: this.state.searchResults,
         addToWatchList: this.addToWatchList
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Feed, {
-        items: this.state.items,
+        setAsWatched: this.setAsWatched,
         feedItems: this.state.feedItems
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("footer", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Footer, {
         clearFeed: this.clearFeed
@@ -516,7 +533,7 @@ if (content.locals) {
 
 exports = module.exports = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js")(false);
 // Module
-exports.push([module.i, "body {\n  background: #ce6868;\n  color: #383737;\n  text-align: center; }\n\ninput {\n  border-radius: 25px;\n  margin: 10px;\n  text-align: center;\n  box-shadow: 1px 1px; }\n\n.button {\n  border-radius: 25px;\n  box-shadow: 1px 1px;\n  margin: 2px; }\n\n#result {\n  background: whitesmoke;\n  border: 2px solid #383737;\n  height: 40px;\n  width: 60%;\n  box-shadow: 3px 5px;\n  margin: 2% auto; }\n\n#item {\n  background: whitesmoke;\n  border: 2px solid #383737;\n  height: 100px;\n  width: 60%;\n  margin: 25px;\n  box-shadow: 3px 5px;\n  margin: 0 auto; }\n\nfooter {\n  display: flex;\n  justify-content: center;\n  position: fixed;\n  bottom: 0;\n  width: 100%;\n  margin-bottom: 1%;\n  align-items: center;\n  font-size: medium; }\n\n.clearbutton {\n  background: #383737;\n  opacity: 0.6;\n  color: #ce6868;\n  border: 1px solid #383737;\n  padding: 10px; }\n", ""]);
+exports.push([module.i, "body {\n  background: #ce6868;\n  color: #383737;\n  text-align: center; }\n\ninput {\n  border-radius: 25px;\n  margin: 10px;\n  text-align: center;\n  box-shadow: 1px 1px; }\n\n.button {\n  border-radius: 25px;\n  box-shadow: 1px 1px;\n  margin: 2px; }\n\n#result {\n  background: whitesmoke;\n  border: 2px solid #383737;\n  height: auto;\n  width: 30%;\n  box-shadow: 3px 5px;\n  margin: 2% auto; }\n\n#item {\n  background: whitesmoke;\n  border: 2px solid #383737;\n  height: 15%;\n  width: 50%;\n  margin: 25px;\n  box-shadow: 3px 5px;\n  margin: 1% auto;\n  font-size: 20; }\n\n#item p {\n  font-size: medium; }\n\nfooter {\n  display: flex;\n  justify-content: center;\n  position: fixed;\n  bottom: 0;\n  width: 100%;\n  margin-bottom: 1%;\n  align-items: center;\n  font-size: medium; }\n\n.clearbutton {\n  background: #383737;\n  opacity: 0.6;\n  color: #ce6868;\n  border: 1px solid #383737;\n  padding: 10px; }\n", ""]);
 
 
 /***/ }),

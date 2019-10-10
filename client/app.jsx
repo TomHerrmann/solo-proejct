@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import fetch from 'node-fetch';
 
-class Footer extends Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return <button className='clearbutton' /*onClick={this.props.clearFeed}*/>Clear Feed</button>
-  }
-}
+// class Footer extends Component {
+//   constructor(props) {
+//     super(props);
+//   }
+//   render() {
+//     return <button className='clearbutton' /*onClick={this.props.clearFeed}*/>Clear Feed</button>
+//   }
+// }
 
 class Item extends Component {
   constructor(props) {
@@ -19,11 +19,11 @@ class Item extends Component {
   // Smaller delete option
   render() {
     return (
-      <button key={this.props.id} id="item">
+      <button key={this.props.id} id="item" onClick={() => { this.props.setAsWatched(this.props.id) }}>
 
         <h1>{this.props.title} ({this.props.year})</h1>
         <h2>Rotten Tomatoes Score: {this.props.rt}</h2>
-        <p>Summary: {this.props.plot}</p>
+        <p>{this.props.plot}</p>
         {/* <h3>
           {this.props.title} ({this.props.year})
         </h3>
@@ -49,7 +49,7 @@ class Result extends Component {
           this.props.addToWatchList(this.props.id);
         }}
       >
-        {this.props.title} ({this.props.year})
+        <h1>{this.props.title} ({this.props.year})</h1>
       </button>
     );
   }
@@ -63,11 +63,11 @@ class Feed extends Component {
   render() {
     const itemsArray = [];
 
+    console.log(this.props.feedItems)
     if (this.props.feedItems) {
       this.props.feedItems.forEach(elem => {
-        console.log(elem)
-        itemsArray.push(
-          <Item title={elem.title} id={elem.id} year={elem.year} plot={elem.plot} rt={elem.rt} />
+        if (elem.watched === false) itemsArray.push(
+          <Item title={elem.title} id={elem.id} year={elem.year} plot={elem.plot} rt={elem.rt} setAsWatched={this.props.setAsWatched} />
         )
       })
     }
@@ -201,8 +201,15 @@ class App extends Component {
       .catch(err => console.log('GET ERROR', err))
   }
 
-  setAsWatched() {
-    fetch('/setAsWatched')
+  setAsWatched(id) {
+    fetch('/setAsWatched', {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({ id })
+    })
   }
 
   render() {
@@ -228,10 +235,10 @@ class App extends Component {
         </header>
         <div id="app">
           <Results searchResults={this.state.searchResults} addToWatchList={this.addToWatchList} />
-          <Feed items={this.state.items} feedItems={this.state.feedItems} />
-          <footer>
+          <Feed setAsWatched={this.setAsWatched} feedItems={this.state.feedItems} />
+          {/* <footer>
             <Footer clearFeed={this.clearFeed} />
-          </footer>
+          </footer> */}
         </div>
       </div>
     );

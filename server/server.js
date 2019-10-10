@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, '../index.html')));
 
 app.post('/postmedia*', mediaController.postMedia, (req, res) => {
-  console.log('Media added to database');
+  res.redirect('/')
 });
 
 app.get('/getmedia*', mediaController.getMedia, (req, res) => {
@@ -23,7 +23,7 @@ app.get('/getmedia*', mediaController.getMedia, (req, res) => {
 // })
 
 app.post('/setaswatched', mediaController.setAsWatched, (req, res) => {
-  console.log('working')
+  console.log('server working')
 })
 
 app.all('*', (req, res) => {
