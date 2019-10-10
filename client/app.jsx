@@ -9,10 +9,15 @@ class Item extends Component {
   // Check box to mark as watched and remove
   // Smaller delete option
   render() {
+    console.log(this);
     return (
-      <div key={this.props.id} id="item">
-        {/* {this.props.title} ({this.props.year}) */}
-      </div>
+      <button key={this.props.id} id="item">
+        <h3>
+          {this.props.title} ({this.props.year})
+        </h3>
+        <i>Rotten Tomatoes Score: {this.props.rottenTomatoes}</i>
+        {/* <p>Plot: {this.props.plot}</p> */}
+      </button>
     );
   }
 }
@@ -25,7 +30,13 @@ class Result extends Component {
   // Click to add to watch list
   render() {
     return (
-      <button key={this.props.id} id="result" onClick={this.props.addToWatchList}>
+      <button
+        key={this.props.id}
+        id="result"
+        onClick={() => {
+          this.props.addToWatchList(this.props.id);
+        }}
+      >
         {this.props.title} ({this.props.year})
       </button>
     );
@@ -38,10 +49,40 @@ class Feed extends Component {
   }
   // Displays Items (movies & shows) that a user has added to their list
   render() {
+    const itemsArray = [];
+
+    console.log('ITEMS IN FEED', this.props.items);
+
+    if (Object.values(this.props.items)[0]) {
+      Object.values(this.props.items).forEach((elem, idx) => {
+        if (elem.watched === false) {
+          itemsArray.push(
+            <Item
+              idx={idx}
+              rottenTomatoes={elem.Ratings[1].Value}
+              poster={elem.Poster}
+              title={elem.Title}
+              year={elem.Year}
+              plot={elem.Plot}
+              actors={elem.Actors}
+              release={elem.Release}
+              imdbID={elem.imdbID}
+              genre={elem.Genre}
+              director={elem.Director}
+              rated={elem.Rated}
+              runtime={elem.Runtime}
+              watched={elem.watched}
+            />
+          );
+        }
+      });
+    }
+
+    console.log('IA', itemsArray);
     return (
       <main id="feed">
         <h2>Your Movies & Shows</h2>
-        <Item />
+        {itemsArray}
       </main>
     );
   }
@@ -86,7 +127,7 @@ class App extends Component {
     super(props);
     this.state = {
       searchResults: '',
-      items: []
+      items: {}
     };
     this.searchFunc = this.searchFunc.bind(this);
     this.clearResults = this.clearResults.bind(this);
@@ -105,14 +146,19 @@ class App extends Component {
     this.setState({ searchResults: '' });
   }
 
-  addToWatchList() {
-    console.log('addToWatchList');
-    this.state.items.push('TEXT');
-
+  addToWatchList(buttonKey) {
+    const newItem = {};
+    fetch(`http://www.omdbapi.com/?i=${buttonKey}&apikey=e53aeb90`)
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+        newItem[data.imdbID] = data;
+        Object.assign(newItem[data.imdbID], { watched: false });
+        this.setState(Object.assign(this.state.items, newItem));
+      });
   }
 
   render() {
-    console.log(this.addToWatchList);
     return (
       <div id="app">
         <header>
