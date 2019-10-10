@@ -151,11 +151,23 @@ class App extends Component {
     fetch(`http://www.omdbapi.com/?i=${buttonKey}&apikey=e53aeb90`)
       .then(res => res.json())
       .then(data => {
-        console.log(data);
         newItem[data.imdbID] = data;
         Object.assign(newItem[data.imdbID], { watched: false });
         this.setState(Object.assign(this.state.items, newItem));
-      });
+        // POST reqeust
+        // *** NOT WORKING ****
+        fetch('/mediapost'), {
+          header: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          method: 'POST',
+          body: JSON.stringify({ media: newItem[data][Title], watched: false })
+        }
+          .then(res => console.log(res))
+          .catch(err => console.log(err))
+      })
+      .catch(err => console.log('ERROR', err))
   }
 
   render() {
