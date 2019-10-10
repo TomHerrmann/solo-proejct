@@ -4,11 +4,8 @@ const webpack = require('webpack');
 module.exports = {
   entry: path.resolve(__dirname, './client/index.js'),
   output: {
-    // path: path.resolve(__dirname, 'public/'),
-    // filename: 'bundle.js'
     filename: 'bundle.js',
-    path: __dirname + 'public',
-    publicPath: './public'
+    path: path.resolve(__dirname, 'public'),
   },
   mode: 'development',
   module: {
@@ -33,9 +30,11 @@ module.exports = {
   },
   devServer: {
     publicPath: path.resolve(__dirname, '/public/'),
-    port: 8080,
     proxy: {
-      '/api': 'http://localhost:3000'
+      '/postmedia*': 'http://localhost:3000',
+      '/getmedia*': 'http://localhost:3000',
+      // '/clearfeed*': 'http://localhost:3000',
+      '/setAsWatched*': 'http://localhost:3000',
     }
   },
   devtool: 'source-map',

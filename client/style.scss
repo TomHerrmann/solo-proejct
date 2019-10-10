@@ -35,3 +35,22 @@ input {
   box-shadow: 3px 5px;
   margin: 0 auto;
 }
+
+footer {
+  display: flex;
+  justify-content: center;
+  position: fixed;;
+  bottom: 0;
+  width: 100%;
+  margin-bottom: 1%;
+  align-items: center;
+  font-size: medium;
+}
+
+.clearbutton {
+  background: rgb(56, 55, 55);
+  opacity: 0.6;
+  color: #ce6868;
+  border: 1px solid #383737;
+  padding: 10px;
+}
