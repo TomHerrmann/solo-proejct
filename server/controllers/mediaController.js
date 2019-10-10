@@ -24,9 +24,9 @@ module.exports = {
   },
 
   postMedia: (req, res, next) => {
-    const dbQuery = `INSERT INTO watchlist (id, name, title, watched) VALUES ($1, $2, $3, $4)`;
-    const { id, title, watched } = req.body;
-    const valuesArr = [id, name, title, watched];
+    const dbQuery = `INSERT INTO watchlist (id, name, title, watched, year, rt, plot) VALUES ($1, $2, $3, $4, $5, $6, $7)`;
+    const { id, title, watched, year, rt, plot } = req.body;
+    const valuesArr = [id, name, title, watched, year, rt, plot];
     pool.query(dbQuery, valuesArr);
     return next();
   },

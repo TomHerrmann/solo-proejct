@@ -400,7 +400,10 @@ function (_Component6) {
           body: JSON.stringify({
             id: data.imdbID,
             title: newItem[data.imdbID].Title,
-            watched: false
+            watched: false,
+            year: newItem[data.imdbID].Year,
+            rt: newItem[data.imdbID].Ratings[1].Value,
+            plot: newItem[data.imdbID].Plot
           })
         })["catch"](function (err) {
           return console.log('POST ERROR', err);

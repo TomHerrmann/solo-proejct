@@ -191,7 +191,7 @@ class App extends Component {
             'Content-Type': 'application/json'
           },
           method: 'POST',
-          body: JSON.stringify({ id: data.imdbID, title: newItem[data.imdbID].Title, watched: false })
+          body: JSON.stringify({ id: data.imdbID, title: newItem[data.imdbID].Title, watched: false, year: newItem[data.imdbID].Year, rt: newItem[data.imdbID].Ratings[1].Value, plot: newItem[data.imdbID].Plot })
         })
           .catch(err => console.log('POST ERROR', err))
       })
